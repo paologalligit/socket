@@ -26,7 +26,7 @@ public class UDPClient {
         throw new IllegalArgumentException("Porta non valida");
       }
 
-      client = new DatagramSocket(porta);
+      client = new DatagramSocket();
       Util.print(true, "Indirizzo: " + client.getLocalAddress() + "; porta: " + client.getLocalPort());
 
       InetSocketAddress isa = new InetSocketAddress(nomeHost, porta);

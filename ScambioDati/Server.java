@@ -45,6 +45,8 @@ public class Server {
 
                 print(true, "Il client si è disconnesso, la pagani è contenta. Indirizzo client " 
                     + client.getInetAddress() + " porta: " + client.getPort());
+
+		client.close();
             }
         } catch (Exception i) {
             i.printStackTrace();
