@@ -18,6 +18,7 @@ public class Client {
         else
             System.out.print("");
     }
+
     public static void main(String[] args) {
         Socket client;
         InetAddress ia;
@@ -38,18 +39,21 @@ public class Client {
             print(true, "Indirizzo: " + client.getInetAddress()
                 + "; porta: " + client.getPort());
 
-            String frase = br.readLine();
+            String frase = null;
+            do {
+                frase = br.readLine();
 
-            OutputStream toSrv = client.getOutputStream();
-            toSrv.write(frase.getBytes(), 0, frase.length());                
+                OutputStream toSrv = client.getOutputStream();
+                toSrv.write(frase.getBytes(), 0, frase.length());   
+            } while(!frase.equals("0"));        
 
-            Thread.sleep(1 * 1_000);
+            client.close();
         } catch (UnknownHostException u) {
             u.printStackTrace();
         } catch (IOException i) {
             i.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } finally {
+            print(true, "Fanculo dal client");
         }
     }
 }
