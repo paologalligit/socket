@@ -97,8 +97,7 @@ public class Client {
 
       InetSocketAddress isa = new InetSocketAddress(nomeHost, porta);
       
-      byte[] inputBuffer;
-      inputBuffer = new byte[DIM_BUFFER];
+      byte[] inputBuffer = new byte[DIM_BUFFER];
 
       sendMessage(client, isa);
       

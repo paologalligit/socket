@@ -14,9 +14,7 @@ public class Server {
   static private int vinte;
 
   private static void sendMessage(DatagramSocket server, String address, int port, String message) throws IOException {
-    byte[] outputBuffer = new byte[DIM_BUFFER];
-
-    outputBuffer = message.getBytes();
+    byte[] outputBuffer = message.getBytes();
     
     DatagramPacket packetSent = new DatagramPacket(outputBuffer, outputBuffer.length);
 
@@ -36,7 +34,6 @@ public class Server {
       InetAddress ia = packetReceived.getAddress();
       sendMessage(server, ia.getHostAddress(), currentPort, "Il server stà già giocando una partita, attendere il proprio turno");
       
-      packetReceived = new DatagramPacket(inputBuffer, DIM_BUFFER);
       server.receive(packetReceived);
       currentPort = packetReceived.getPort();
     } 
