@@ -25,11 +25,21 @@ public class Server {
     server.send(packetSent);
   }
 
-  private static String listen(DatagramSocket server) throws  IOException {
+  private static String listen(DatagramSocket server, int port) throws  IOException {
     byte[] inputBuffer = new byte[DIM_BUFFER];
 
     DatagramPacket packetReceived = new DatagramPacket(inputBuffer, DIM_BUFFER);
     server.receive(packetReceived);
+
+    int currentPort = packetReceived.getPort();
+    while (currentPort != port) {
+      InetAddress ia = packetReceived.getAddress();
+      sendMessage(server, ia.getHostAddress(), currentPort, "Il server stà già giocando una partita, attendere il proprio turno");
+      
+      packetReceived = new DatagramPacket(inputBuffer, DIM_BUFFER);
+      server.receive(packetReceived);
+      currentPort = packetReceived.getPort();
+    } 
 
     return new String(inputBuffer, 0, packetReceived.getLength());
   }
@@ -39,7 +49,7 @@ public class Server {
 
     String move = MOVE_SET[r.nextInt(3)];
     System.out.println("Server fa: " + move);
-    
+
     return move;
   }
 
@@ -77,14 +87,14 @@ public class Server {
           sendMessage(server, ia.getHostAddress(), port, "k");
 
           // ricevi mossa
-          String mossa = listen(server);
+          String mossa = listen(server, port);
           System.out.println("Client fa: " + mossa);
 
           // elabora mossa
           sendMessage(server, ia.getHostAddress(), port, makeMove());
 
           // ricezione risultato
-          String result = listen(server);
+          String result = listen(server, port);
           if (result.equals("y")) {
             vinte++;
           }
