@@ -5,6 +5,7 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.Scanner;
 
 public class Stazione extends Client {
     public Stazione(String hostName, int port) throws SocketException {
@@ -15,10 +16,13 @@ public class Stazione extends Client {
         InputStreamReader tastiera = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(tastiera);
 
+	Scanner in = new Scanner(System.in);
+
         String message;
         do {
             System.out.print("N° treno e ritardo in min: ");
-            message = br.readLine();
+            // message = br.readLine();
+	    message = in.nextLine();
         } while (!checkTrainMessage(message));
 
         if (message.equals(".")) {
