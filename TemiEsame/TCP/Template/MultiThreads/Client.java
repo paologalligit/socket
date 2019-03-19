@@ -42,6 +42,18 @@ public class Client {
     sendMessage(message);
   }
   public static void main(String[] args) {
-    
+    try {
+      Client client = new Client(Integer.parseInt(args[0]));
+      
+      client.connect();
+
+      System.out.print("Inserisci messaggio: ");
+      client.sendMessage();
+
+      String response = client.listen();
+      System.out.println("Messaggio ricevuto da server: " + response);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

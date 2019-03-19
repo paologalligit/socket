@@ -1,0 +1,21 @@
+Implementare una applicazione "banca" tramite TCP singolo processo.
+
+-Server:
+All'avvio da 1000 euro a tutti i clienti registrati. Quando un Client si connette chiede una login tra Rossi, Bianchi e Verdi. 
+Se il Client si idenfica correttamente manda un ack e una richiesta di immissione di operazione. Altrimenti chiude la connessione con quel Client.
+Le operazioni possibili sono:
+"bilancio" restituisce quanti soldi ha il Client
+"bonifico nome somma" verifica che nome sia una persona registrata e che il Client chiamante abbia abbastanza soldi per effettuare il bonifico. 
+	Se è tutto in regola esegue il bonifico e manda ack, altrimenti nack con il rispettivo errore.
+"missiva" detrae 5 euro dal client e manda un ack. Se non ha abbastanza soldi manda nack.
+"quit" chiude la connessione.
+
+Qualsiasi altro input deve restituire errore e chiedere nuovamente l'inserimento dell'operazione.
+
+-Client
+Connessosi al server prova a fare la login e poi sceglie una delle operazioni. Quando ha finito usa la funzione quit per scollegarsi. 
+	Bisogna garantire una coda di almeno 4 Client connessi. 
+
+Note:
+Gestire anche i casi in cui il Client possa crashare prima di mandare la "quit".
+Più o meno era così. Se volete dopo averlo fatto singolo processo potreste fare una classe synchronized con i soldi e i metodi e fare multiprocesso. 
