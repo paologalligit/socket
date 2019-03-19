@@ -33,7 +33,7 @@ public class Server {
     printClientInfos();
   }
   public void fork() throws IOException {
-    Thread t = new ErogaServizio(client);
+    Thread t = new ErogaServizio(client, table);
     t.start();
   }
 
