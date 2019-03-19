@@ -1,5 +1,7 @@
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -15,11 +17,10 @@ public class Client {
         client = new Socket();
         InetAddress ia = InetAddress.getLocalHost();
         isa = new InetSocketAddress(ia, port);
-        printClientInfos();
     }
 
     public void printClientInfos() {
-        System.out.println("Client address: " + client.getLocalAddress() + "; port: " + client.getLocalPort());
+        System.out.println("Client address: " + client.getInetAddress() + "; port: " + client.getLocalPort());
     }
     public String listen() throws IOException {
         byte[] buffer = new byte[DIM_BUF];
@@ -32,12 +33,14 @@ public class Client {
         OutputStream toSrv = client.getOutputStream();
         toSrv.write(message.getBytes(), 0, message.length());
     }
-    public void sendMessage() throws IOException {
-        Scanner in = new Scanner(System.in);
-        String message = in.nextLine();
-        in.close();
+    public String sendMessage() throws IOException {
+        InputStreamReader tastiera = new InputStreamReader(System.in);
+        BufferedReader br = new BufferedReader(tastiera);
+        String message = br.readLine();
 
         sendMessage(message);
+
+        return message;
     }
     public void connect() throws IOException {
         client.connect(isa);
@@ -54,6 +57,7 @@ public class Client {
         try {
             Client client = new Client(Integer.parseInt(args[0]));
             client.connect();
+            client.printClientInfos();
 
             System.out.print("Login: ");
             client.sendMessage();
@@ -62,9 +66,26 @@ public class Client {
 
             if (response.equals("Denied")) {
                 System.out.println("Connessione rifiutata!");
-                client.close();
+                client.closeClient();
+            } else {
+                System.out.println("Message from server: " + response);
+                String scelta = "", request;
+                do {
+                    do {
+                        System.out.print("Operazione: ");
+                        request = client.sendMessage();
+                        if (request.equals("quit")) {
+                            scelta = "quit";
+                            break;
+                        }
+                        scelta = client.listen();
+                        System.out.println("rievuto dal server: " + scelta);
+                    } while (scelta.equals("x"));
+                } while (!scelta.equals("quit"));
             }
             
+            System.out.println("Client closed");
+            client.closeClient();
         } catch (Exception e) {
             e.printStackTrace();
         }
